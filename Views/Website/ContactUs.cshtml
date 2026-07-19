@@ -1,0 +1,352 @@
+﻿@model ParkingManagement.Models.Feedback
+@*
+    Enhanced Contact Page with Glassmorphism and Mesh Animation
+*@
+@{
+    ViewBag.Title = "Contact Us - Website";
+    Layout = "_WebsiteLayout";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+
+    /* --- ENHANCED ANIMATED BACKGROUND --- */
+    .mesh-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;        
+    }
+  
+    /* --- GLASSMOPHISM CONTACT CARD --- */
+    .container {
+        position: relative;
+        z-index: 2;
+        width: 95%;
+        max-width: 500px;
+    }
+
+    .contact-card {
+        background: rgba(255, 255, 255, 0.03); /* Translucent */
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 28px;
+        padding: 30px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @@keyframes cardAppear {
+        from {
+            opacity: 0;
+            transform: scale(0.9) translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    h2 {
+        text-align: center;
+        color: #fff;
+        margin-bottom: 8px;
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -1px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #94a3b8;
+        margin-bottom: 35px;
+        font-size: 15px;
+    }
+
+    /* --- FORM STYLING --- */
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .form-group i {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748b;
+        font-size: 18px;
+        transition: color 0.3s;
+    }
+
+    .form-group textarea + i {
+        top: 22px;
+        transform: none;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 15px 15px 15px 50px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid gray;
+        border-radius: 14px;
+        font-size: 15px;
+        color: 000;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        outline: none;
+    }
+
+    input::placeholder, textarea::placeholder {
+        color: #64748b;
+    }
+
+    input:focus, textarea:focus {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.15);
+    }
+
+    input:focus + i, textarea:focus + i {
+        color: var(--accent);
+    }
+
+    textarea {
+        resize: none;
+        min-height: 120px;
+    }
+
+    button {
+        width: 100%;
+        padding: 16px;
+        background: gray;
+        color: white;
+        border: none;
+        border-radius: 14px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+        button:hover {
+            background: #f43f5e;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(225, 29, 72, 0.4);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+
+
+    .animated-bg {
+        position: absolute;
+        width: 95%;
+        height: 95%;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .bubble {
+        position: absolute;
+        bottom: -100px;
+        background: rgba(0,0, 126, 0.1);
+        border-radius: 50%;
+        animation: rise 15s infinite ease-in;
+    }
+
+        .bubble:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .bubble:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            left: 20%;
+            animation-delay: 2s;
+        }
+
+        .bubble:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            left: 35%;
+            animation-delay: 4s;
+        }
+
+        .bubble:nth-child(4) {
+            width: 70px;
+            height: 70px;
+            left: 50%;
+            animation-delay: 0s;
+        }
+
+        .bubble:nth-child(5) {
+            width: 90px;
+            height: 90px;
+            left: 65%;
+            animation-delay: 3s;
+        }
+
+        .bubble:nth-child(6) {
+            width: 120px;
+            height: 120px;
+            left: 80%;
+            animation-delay: 1s;
+        }
+
+        .bubble:nth-child(7) {
+            width: 50px;
+            height: 50px;
+            left: 90%;
+            animation-delay: 5s;
+        }
+
+    @@keyframes rise {
+        0% {
+            bottom: -100px;
+            transform: translateX(0);
+        }
+
+        50% {
+            transform: translateX(100px);
+        }
+
+        100% {
+            bottom: 110vh;
+            transform: translateX(-100px);
+        }
+    }
+
+    @@media (max-width:426px) {
+        .container {
+            margin-top: 50px;
+        }
+        <!-- Contact card -->
+        .contact-card {
+ 
+            padding: 10px;
+ 
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 5px 5px 5px 35px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid gray;
+            border-radius: 10px;
+            font-size: 15px;
+            color: 000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+        }
+        textarea {
+            /* resize: none; */
+            min-height: 80px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 8px;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+     
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+        .form-group i {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        button {  
+            padding: 10px;
+        }
+        
+    }
+ 
+
+
+</style>
+<div class="mt-5 py-sm-5 py-4">
+
+
+
+
+        <div class="animated-bg">
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+        </div>
+    <div class="container  pt-sm-5 pt-3">
+
+
+
+        <div class="contact-card">
+            <h2 class="text-black"><i class="bi env text-danger bi-envelope-heart"></i> Get In Touch</h2>
+            <p class="subtitle">Have a question? We're here to help.</p>
+
+            <form method="post" asp-action="SaveFeedback">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Full Name" asp-for="name" required>
+                    <i class="bi bi-person"></i>
+                </div>
+
+                <div class="form-group">
+                    <input type="email" placeholder="Email Address" asp-for="email" required>
+                    <i class="bi bi-envelope"></i>
+                </div>
+
+                <div class="form-group">
+                    <input type="number" placeholder="Mobile" asp-for="mobile" required>
+                    <i class="bi bi-phone"></i>
+                </div>
+
+                <div class="form-group">
+                    <textarea placeholder="Tell us more about your inquiry..." asp-for="message" required></textarea>
+                    <i class="bi bi-pencil"></i>
+                </div>
+
+                <button type="submit">
+                    <span>Send Message</span>
+                    <i class="bi bi-arrow-right" style="position:static; transform:none; color:inherit;"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+           header.style.backgroundColor = "black";
+</script>

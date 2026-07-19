@@ -1,0 +1,335 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewBag.Title</title>
+    <link rel="shortcut icon" href="~/Assets/images/Favicon.png" type="image/x-icon">
+    <meta name="description" content="Maximize revenue and streamline operations with our cloud-based Parking Management System. Features include LPR, Access Control, and real-time reporting.">
+    <link rel="canonical" href="https://www.your-domain.com/parking-management-system/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta property="og:title" content="The Intelligent Parking Management System for Automated Operations">
+    <meta property="og:description" content="Increase revenue and efficiency with the leading cloud-based Smart Parking System featuring LPR and real-time data.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.your-domain.com/parking-management-system/">
+    <meta property="og:image" content="https://www.your-domain.com/images/smart-parking-hero-1200x630.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.23.3/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.23.3/dist/js/uikit-icons.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* --- Header & Navigation --- */
+        #header {
+            transition: all 0.2s ease;
+        }
+
+        .main-nav {
+            background-color: transparent;
+        }
+
+        .logo img {
+            width: 75%;
+        }
+
+        .nav-tabs {
+            margin: 0;
+            width: 75%;
+            display: flex;
+            justify-content: space-evenly;
+            font-size: 22px;
+            list-style: none;
+            border: none;
+        }
+
+            .nav-tabs > li > a {
+                text-decoration: none;
+                color: white;
+                opacity: 0.60;
+            }
+
+                .nav-tabs > li > a:hover, .nav-tabs > li > a.active {
+                    opacity: 1 !important;
+                    color: white;
+                }
+
+        .nav-open {
+            display: none;
+        }
+
+        /* --- Car Animation --- */
+        .cycle {
+            position: absolute;
+            top: 60px;
+            height: 50px;
+            width: 150px;
+            animation: movingcycle 12s linear infinite;
+        }
+
+        @@keyframes movingcycle {
+            from {
+                margin-left: 0px;
+            }
+
+            to {
+                margin-left: 100vw;
+            }
+        }
+
+        /* --- Premium Offcanvas Styles --- */
+        .modern-offcanvas {
+            background: linear-gradient(180deg, #0f0f0f 0%, #1a1a1a 100%) !important;
+            color: white !important;
+            width: 320px !important;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .custom-nav .nav-link-custom {
+            display: flex;
+            /* align-items: center; */
+            padding: 14px 25px;
+            text-decoration: none;
+            color: rgba(255,255,255,0.7);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+            .custom-nav .nav-link-custom:hover {
+                color: #fff;
+                background: rgba(255,255,255,0.05);
+                border-left: 4px solid #0b74da;
+                padding-left: 35px;
+            }
+
+            .custom-nav .nav-link-custom.active {
+                color: white;
+                background: rgba(11, 116, 218, 0.15);
+                border-left: 4px solid #0b74da;
+            }
+
+        .promo-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .tracking-widest {
+            letter-spacing: 0.15em;
+        }
+
+        .filter-white {
+            filter: brightness(0) invert(1);
+        }
+
+        .btn-close-white {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+
+        .hover-gold:hover {
+            color: #ffc107 !important;
+            transform: translateY(-3px);
+            transition: 0.2s;
+        }
+
+        /* --- Footer Styles --- */
+        .foot-ul > li > a {
+            color: white;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+            .foot-ul > li:hover, .foot-ul > li > a:hover {
+                transform: scale(1.05);
+                color: yellow !important;
+            }
+
+        @@media (max-width: 426px) {
+            .nav-tabs {
+                display: none;
+            }
+
+            .nav-open {
+                display: block;
+                font-size: 32px;
+            }
+
+            .logo img {
+                width: 100%;
+            }
+
+            .cycle {
+                display: none;
+            }
+
+            .phone {
+                text-align: center;
+            }
+        }
+
+        @@media (max-width: 426px) {
+            .nav-tabs {
+                display: none;
+            }
+
+            .nav-open {
+                display: block;
+                font-size: 32px;
+            }
+
+            .logo img {
+                width: 100%;
+            }
+
+            .cycle {
+                display: none;
+            }
+            /* --- Changed from center to left --- */
+            .phone {
+                text-align: left;
+                padding-left: 25px; /* Adds a nice margin from the left edge */
+                padding-right: 20px;
+            }
+            /* Ensures the logo in footer also aligns left on mobile */
+            .footer-logo-container {
+                padding-left: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div id="header" class="row fixed-top overflow-hidden">
+            <div class="col-sm-4 d-flex align-items-center main-nav">
+                <div class="logo p-0 m-0">
+                    <img src="~/Assets/images/AuraPark-logo (2).png" alt="AuraPark Logo">
+                </div>
+                <div class="w-25 m-0 nav-open">
+                    <a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button">
+                        <i class="fa-solid float-end me-4 fw-bold text-white fa-bars-staggered"></i>
+                    </a>
+                </div>
+
+                <div style="z-index:9999;" class="offcanvas offcanvas-start modern-offcanvas" tabindex="-1" id="offcanvasExample">
+                    <div class="offcanvas-header border-bottom border-light border-opacity-10 py-3">
+                        <div class="logo p-0 m-0 w-75">
+                            <img class="w-100" src="~/Assets/images/AuraPark-logo (2).png" alt="Logo" />
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+
+                    <div class="offcanvas-body p-0 d-flex flex-column h-100">
+                        <div class="menu-section mt-4">
+                            <p class="text-uppercase small fw-bold px-4 mb-2 tracking-widest">Navigation</p>
+                            <ul class="list-unstyled w-100 custom-nav">
+                                <li><a class="nav-link-custom @(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")" asp-action="Index"><i class="bi bi-house-door me-3"></i>Home</a></li>
+                                <li><a class="nav-link-custom @(ViewContext.RouteData.Values["Action"]?.ToString() == "FindParking" ? "active" : "")" asp-action="FindParking"><i class="bi bi-geo-alt me-3"></i>Find Parking</a></li>
+                                <li><a class="nav-link-custom @(ViewContext.RouteData.Values["Action"]?.ToString() == "AddParking" ? "active" : "")" asp-action="AddParking"><i class="bi bi-plus-circle me-3"></i>Add Parking</a></li>
+                                <li><a class="nav-link-custom @(ViewContext.RouteData.Values["Action"]?.ToString() == "AboutUs" ? "active" : "")" asp-action="AboutUs"><i class="bi bi-info-circle me-3"></i>About Us</a></li>
+                                <li><a class="nav-link-custom @(ViewContext.RouteData.Values["Action"]?.ToString() == "ContactUs" ? "active" : "")" asp-action="ContactUs"><i class="bi bi-envelope me-3"></i>Contact Us</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="p-4 mt-3 mx-3 rounded-4 promo-card">
+                            <h6 class="fw-bold text-white mb-2">Smart Owner Tip</h6>
+                            <p class="small text-white-50 mb-0">List your spot during peak office hours to maximize your daily earnings!</p>
+                        </div>
+
+                        <div class="mt-auto p-4 border-top border-light border-opacity-10 bg-black bg-opacity-25">
+                            <div class="d-flex justify-content-around fs-4 mb-3">
+                                <a href="https://www.linkedin.com/in/pal-yogesh" class="text-white-50 hover-gold" target="_blank"><i class="bi bi-linkedin"></i></a>
+                                <a href="https://www.instagram.com/the_yogeshpal/" class="text-white-50 hover-gold" target="_blank"><i class="bi bi-instagram"></i></a>
+                                <a href="#" class="text-white-50 hover-gold"><i class="bi bi-twitter-x"></i></a>
+                                <a href="#" class="text-white-50 hover-gold"><i class="bi bi-facebook"></i></a>
+                            </div>
+                            <p class="text-center small text-muted mb-0">© 2026 AuraPark Solutions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8 d-flex align-items-center justify-content-between">
+                <ul class="border-0 nav-tabs">
+                    <li><a class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")" asp-action="Index">Home</a></li>
+                    <li><a class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "FindParking" ? "active" : "")" asp-action="FindParking">Find Parking</a></li>
+                    <li><a class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "AddParking" ? "active" : "")" asp-action="AddParking">Add Parking</a></li>
+                    <li><a class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "AboutUs" ? "active" : "")" asp-action="AboutUs">About Us</a></li>
+                    <li><a class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "ContactUs" ? "active" : "")" asp-action="ContactUs">Contact Us</a></li>
+                </ul>
+            </div>
+            <img class="cycle" src="~/Assets/images/car-moving.gif" alt="Animated Car">
+        </div>
+
+        @RenderBody()
+
+        <div class="row pb-0 py-sm-5 py-3 bg-black mt-5">
+            <div class="col-sm-4 mt-sm-5 mb-2">
+                <div class="w-100 ps-sm-5 d-flex align-items-start justify-content-start flex-column">
+                    <img class="w-75 mx-auto" src="~/Assets/images/AuraPark-logo (2).png" />
+                    <p class="ps-sm-5 text-white" style="text-align:justify;">
+                        <b>AuraPark Smart Parking Solutions</b> connects drivers with available parking across the city. We make city parking simple, efficient, and profitable for space owners.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-sm-2 mt-sm-5 pt-sm-4 ps-sm-5 mb-2 phone">
+                <h4 class="text-white fw-bold">Quick Links</h4>
+                <ul class="list-unstyled foot-ul pt-2">
+                    <li><a asp-action="Index">Home</a></li>
+                    <li><a asp-action="FindParking">Find Parking</a></li>
+                    <li><a asp-action="AddParking">Add Parking</a></li>
+                    <li><a asp-action="AboutUs">About Us</a></li>
+                    <li><a asp-action="ContactUs">Contact Us</a></li>
+                    <li><a class="small opacity-50" target="_blank" asp-action="AdminLogin">Admin Access</a></li>
+                    <li><a class="small opacity-50" target="_blank" asp-action="SuperAdminLogin">Super Admin Access</a></li>
+                </ul>
+            </div>
+
+            <div class="col-sm-3 mt-sm-5 pt-sm-4 ps-sm-5 mb-2 phone">
+                <h4 class="text-white fw-bold">Get in Touch</h4>
+                <ul class="list-unstyled foot-ul pt-2 text-white">
+                    <li class="mb-2"><i class="fa-solid fs-5 fa-phone me-2 text-warning"></i> +91 7817095043</li>
+                    <li class="mb-2"><i class="fa-solid fs-5 fa-envelope me-2 text-warning"></i> yogeshpal1309@@gmail.com</li>
+                    <li class="d-flex gap-2">
+                        <i class="fa-solid fs-5 fa-location-dot mt-1 text-warning"></i>
+                        <span>C-39, Near Ayubkhan Chauraha, New Delhi, UP 110001</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-sm-2 mt-sm-5 pt-sm-4 text-white phone">
+                <h4 class="fw-bold">Follow Us</h4>
+                <ul class="list-unstyled foot-ul pt-2 text-white">
+                    <li class="mb-2"><a target="_blank" href="https://www.linkedin.com/in/pal-yogesh"><i class="fa-brands fa-linkedin me-2"></i>Linkedin</a></li>
+                    <li class="mb-2"><a target="_blank" href="https://www.instagram.com/the_yogeshpal/"><i class="fa-brands fa-instagram me-2"></i>Instagram</a></li>
+                    <li class="mb-2"><a target="_blank" href="#"><i class="fa-brands fa-twitter me-2"></i>Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row bg-black">
+            <div class="col-sm-10 mx-auto">
+                <hr style="border: 1px solid rgba(255,255,255,0.2);" />
+            </div>
+            <div class="col-sm-12 py-3 justify-content-around flex-wrap d-flex text-white small opacity-75">
+                <div>&copy; 2026 Aura Park. All Rights Reserved.</div>
+                <div>Developed by Sandeep Yadav with <span class="text-warning">&#9829;</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

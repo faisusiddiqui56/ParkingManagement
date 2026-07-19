@@ -1,0 +1,278 @@
+﻿@model IEnumerable<ParkingManagement.Models.dailyParking>
+@{
+    ViewBag.Title = "Park Vehicle - Admin";
+    Layout = "_AdminLayout";
+}
+
+<style>
+    :root {
+        --primary-blue: #0d6efd;
+        --soft-bg: #f8f9fa;
+        --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Enhanced Card Style */
+    .entry-card {
+        background: #ffffff;
+        border: none;
+        border-radius: 20px;
+        box-shadow: var(--card-shadow);
+        border-top: 5px solid var(--primary-blue);
+    }
+
+    /* Modern Table Style */
+    .custom-table-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: var(--card-shadow);
+        padding: 25px;
+    }
+
+    .table thead th {
+        background-color: #fcfcfc;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        font-weight: 700;
+        color: #6c757d;
+        border: none;
+        padding: 15px;
+    }
+
+    .table tbody tr {
+        vertical-align: middle;
+        transition: all 0.2s;
+    }
+
+        .table tbody tr:hover {
+            background-color: #f8faff;
+            
+        }
+
+    /* Vehicle Type Badges */
+    .badge-2w {
+        background-color: #e7f3ff;
+        color: #007bff;
+        border-radius: 8px;
+        padding: 6px 12px;
+    }
+
+    .badge-4w {
+        background-color: #f0fdf4;
+        color: #198754;
+        border-radius: 8px;
+        padding: 6px 12px;
+    }
+
+    /* Duration Ticker Style */
+    .duration-text {
+        font-family: 'Monaco', 'Consolas', monospace;
+        font-weight: 600;
+        color: var(--primary-blue);
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+        font-size: 0.9rem;
+    }
+</style>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="entry-card p-4">
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
+                    <i class="bi bi-plus-circle-fill text-primary fs-4"></i>
+                </div>
+                <h4 class="mb-0 fw-bold">Vehicle Entry</h4>
+            </div>
+
+            @if (TempData["saved"] != null)
+            {
+                 
+                    <div class="alert alert-success border-0 shadow-sm d-flex align-items-center animate__animated animate__fadeIn" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <div>Vehicle <strong>@TempData["saved"]</strong> Logged!</div>
+                    </div>
+            }
+            else if (TempData["notsaved"] != null)
+            {
+                <div class="alert alert-danger border-0 shadow-sm d-flex align-items-center animate__animated animate__fadeIn" role="alert">
+                    <i class="bi bi-x-circle-fill me-2"></i>
+                    <div><strong>@TempData["notsaved"]</strong></div>
+                </div>
+            }
+
+            <form method="post" asp-action="SaveParking">
+                <div class="mb-3">
+                    <label class="form-label">Owner Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-0"><i class="fa-solid fa-user"></i></span>
+                        <input type="text" class="form-control bg-light border-0" name="name" placeholder="Vehicle Owner Name" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Vehicle Number</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-0"><i class="fa-solid fa-hashtag"></i></span>
+                        <input type="text" class="form-control bg-light border-0 text-uppercase" name="number" placeholder="UP 32 AB 1234" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Category</label>
+                    @if (ViewBag.Type == "Bike")
+                        {
+                        <div class="d-flex justify-content-center">
+                            <input type="radio" class="btn-check" name="type" id="type2w" value="2W" checked>
+                            <label class="btn btn-outline-success w-100 py-2" for="type2w">
+                                <i class="fa-solid fa-motorcycle me-1"></i> 2W
+                            </label>
+                        </div>
+                        }
+                    else if (ViewBag.Type == "Car")
+                        {
+                        <div class="d-flex justify-content-center">
+                            <input type="radio" checked class="btn-check" name="type" id="type4w" value="4W">
+                            <label class="btn btn-outline-success w-100 py-2" for="type4w">
+                                <i class="fa-solid fa-car me-1"></i> 4W
+                            </label>
+                        </div>
+                        }
+                    else
+                        {
+                        <div class="d-flex gap-2">
+                            <input type="radio" class="btn-check" name="type" id="type2w" value="2W" checked>
+                            <label class="btn btn-outline-primary w-50 py-2" for="type2w">
+                                <i class="bi bi-bicycle me-1"></i> 2W
+                            </label>
+                            <input type="radio" class="btn-check" name="type" id="type4w" value="4W">
+                            <label class="btn btn-outline-success w-50 py-2" for="type4w">
+                                <i class="bi bi-car-front me-1"></i> 4W
+                            </label>
+                        </div>
+                        }
+
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-3 fw-bold shadow-sm">
+                    Generate Entry Ticket <i class="bi bi-arrow-right-short ms-1"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="custom-table-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="mb-0 fw-bold">Live Parking Status</h4>
+                <div class="badge bg-light text-dark border p-2 fw-normal">
+                    <i class="bi bi-record-fill text-danger me-1 animate__animated animate__flash animate__infinite"></i>
+                    @Model.Count() Vehicles Parked
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Vehicle Details</th>
+                            <th>Entry Time</th>
+                            <th>Live Duration</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="active-vehicles-body">
+                        @foreach (var row in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <span class="@(row.type == "2W" ? "badge-2w" : "badge-4w") me-3">
+                                            <i class="fa-solid @(row.type == "2W" ? "fa-motorcycle" : "fa-car")"></i>
+                                        </span>
+                                        <div>
+                                            <div class="fw-bold text-dark">@row.vehiclenumber.ToUpper()</div>
+                                            <div class="small text-muted">@row.type</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="small fw-semibold text-secondary">
+                                        <i class="bi bi-clock me-1"></i> @row.intime
+                                    </div>
+                                </td>
+                                @if(row.outtime == "-")
+                                {
+                                    <td>
+                                        <span class="duration-text" data-intime="@row.intime">00:00:00</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a asp-action="ExitVehicle" asp-route-id="@row.id" class="btn btn-outline-danger btn-sm px-3 rounded-pill">
+                                            Checkout <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                        </a>
+                                    </td>
+                                }
+                                else
+                                {
+
+                                <td>
+                                    <span >@row.outtime</span>
+                                </td>
+                                    <td class="text-end">
+                                        <a class="btn btn-success btn-disabled btn-sm px-3 rounded-pill">
+                                            Checked Out
+                                        </a>
+                                    </td>
+                                }
+                                
+                            </tr>
+                        }
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted">
+                                    <i class="bi bi-info-circle d-block fs-2 mb-2"></i>
+                                    No vehicles currently in the lot.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateDurations() {
+        document.querySelectorAll(".duration-text").forEach(el => {
+            const intimeText = el.getAttribute("data-intime");
+            const [hours, minutes, seconds] = intimeText.split(":").map(Number);
+
+            const now = new Date();
+            const entryDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, seconds);
+
+            let diffMs = now - entryDate;
+            if (diffMs < 0) {
+                entryDate.setDate(entryDate.getDate() - 1);
+                diffMs = now - entryDate;
+            }
+
+            const totalSeconds = Math.floor(diffMs / 1000);
+            const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+            const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+            const s = String(totalSeconds % 60).padStart(2, '0');
+
+            el.textContent = `${h}:${m}:${s}`;
+
+            // Highlight long stays (over 4 hours)
+            if (parseInt(h) >= 4) el.classList.add("text-danger");
+        });
+    }
+
+    setInterval(updateDurations, 1000);
+    updateDurations();
+</script>

@@ -1,0 +1,187 @@
+﻿@model IEnumerable<ParkingManagement.Models.HiddenSpot>
+@{
+    ViewBag.Title = "Anonymous Spot - Admin";
+    Layout = "_SuperAdminLayout";
+}
+
+<style>
+    /* Modern UI Refinements */
+    :root {
+        --primary-soft: #f8f9fa;
+        --accent-color: #6366f1; /* Indigo accent */
+    }
+
+    .table-container {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .parking-img {
+        width: 80px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        transition: transform 0.2s;
+        cursor: pointer;
+    }
+
+        .parking-img:hover {
+            transform: scale(2.5);
+            z-index: 100;
+            position: relative;
+        }
+
+    .sr-col {
+        font-family: 'Segoe UI', sans-serif;
+        font-weight: 700;
+        color: #dee2e6;
+        vertical-align: middle !important;
+    }
+
+    .owner-info b {
+        color: #4b3869; /* RebeccaPurple vibe but more modern */
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .badge-soft {
+        background-color: #eef2ff;
+        color: #4338ca;
+        border: 1px solid #e0e7ff;
+        padding: 5px 10px;
+    }
+
+    .btn-action {
+        width: 38px;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: 0.2s;
+    }
+
+    .table thead th {
+        background-color: var(--primary-soft);
+        color: #495057;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        border: none;
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <h2 class="fw-bold text-dark m-0">Pending Requests <span class="badge bg-primary rounded-pill fs-6">@Model.Count(x => !x.verification)</span></h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                <li class="breadcrumb-item active">Requests</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="table-container">
+        <div class="table-responsive">
+            <table class="table align-middle table-hover" id="myTable">
+                <thead>
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th>Owner Info</th>
+                        <th>Parking Details</th>
+                        <th>Location</th>
+                        <th class="text-center">Photo</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int sr = 1;
+                    }
+                    @foreach (var row in Model.Where(x => !x.verification))
+                    {
+                        <tr>
+                            <td class="text-center sr-col fs-3">@sr.ToString("D2")</td>
+                            <td class="owner-info">
+                                <b class="fs-6">@row.ownername</b>
+                                <div class="small text-muted">
+                                    <i class="fa-solid fa-envelope me-1"></i> @row.email<br />
+                                    <i class="fa-solid fa-phone me-1"></i> @row.mobile
+                                </div>
+                            </td>
+                            <td>
+                                <div class="fw-bold text-dark">@row.parkingname</div>
+                                <div class="mt-1">
+                                    <span class="badge badge-soft text-dark">₹@row.hourrate/hr</span>
+                                    <span class="badge bg-light text-secondary border">@row.type</span>
+                                </div>
+                                <small class="text-muted d-block mt-1"><i class="fa-regular fa-clock"></i> @row.operatinghours</small>
+                            </td>
+                            <td style="max-width: 250px;">
+                                <div class="text-truncate small">
+                                    <i class="fa-solid fa-location-dot text-danger me-1"></i>
+                                    <strong>@row.city, @row.state</strong><br />
+                                    <span class="text-secondary">@row.address</span>
+                                </div>
+                                <a href="@row.map" target="_blank" class="btn btn-sm btn-link p-0 mt-1 text-decoration-none">View on Map &rarr;</a>
+                            </td>
+                            <td class="text-center">
+                                <img class="parking-img shadow-sm" src="~/Parkings/@row.photo" onerror="this.src='/images/placeholder-parking.jpg'" />
+                            </td>
+                            <td class="text-end">
+                                <div class="btn-group shadow-sm" role="group">
+                                    <a class="btn btn-white btn-action border" href="tel:@row.mobile" title="Call Owner">
+                                        <i class="fa-solid fa-phone text-primary"></i>
+                                    </a>
+                                    <a class="btn btn-white btn-action border text-success"
+                                       asp-action="VerifyParking" asp-route-id="@row.id"
+                                       onclick="return confirm('Verify this parking spot?')" title="Approve">
+                                        <i class="fa-solid fa-check"></i>
+                                    </a>
+                                    <button class="btn btn-white btn-action border text-danger"
+                                      
+                                            onclick="return DeleteMessage('@row.id')" title="Reject">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        sr++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function DeleteMessage(id)
+     {
+
+          Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+
+          if (result.isConfirmed) {
+
+              window.location.href = '/SuperAdmin/DeleteSpot/' + id;
+
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success"
+            });
+          }
+        });
+     }
+</script>

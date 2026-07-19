@@ -1,0 +1,284 @@
+﻿@model ParkingManagement.Models.HiddenSpot
+@{
+    ViewBag.Title = "Manage Parking - Admin";
+    Layout = "_AdminLayout";
+}
+
+<style>
+    :root {
+        --details-label: #64748b;
+        --details-value: #1e293b;
+    }
+
+    .detail-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        padding: 24px;
+        border: 1px solid #f1f5f9;
+       
+    }
+
+    .info-group {
+        display: flex;
+        padding: 12px 0;
+        border-bottom: 1px solid #f8fafc;
+        align-items: center;
+        flex-wrap: wrap; /* Allows label/value to stack on very small screens */
+    }
+
+        .info-group:last-child {
+            border-bottom: none;
+        }
+
+    .info-label {
+        flex: 0 0 40%;
+        min-width: 140px;
+        color: var(--details-label);
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+    }
+
+        .info-label i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+            color: #94a3b8;
+        }
+
+    .info-value {
+        flex: 1;
+        color: var(--details-value);
+        font-weight: 500;
+    }
+
+    .park-img-wrapper {
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0d6efd;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #eef2ff;
+        display: flex;
+        align-items: center;
+    }
+
+    .rate-badge {
+        background: #ecfdf5;
+        color: #059669;
+        padding: 4px 12px;
+        border-radius: 99px;
+        font-weight: 700;
+        display: inline-block;
+    }
+
+    /* Modal Form Styling */
+    .modal-body label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--details-label);
+        margin-top: 10px;
+        margin-bottom: 4px;
+    }
+
+    @@media (max-width: 576px) {
+        .header-stack {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 15px;
+        }
+
+            .header-stack button {
+                width: 100%;
+            }
+
+        .info-label {
+            flex: 0 0 100%;
+            margin-bottom: 4px;
+        }
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 header-stack">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item small"><a href="#">Admin</a></li>
+                    <li class="breadcrumb-item small active">Parking Details</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold text-dark m-0">@Model.parkingname</h2>
+        </div>
+        <button class="btn btn-primary px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#EditModal">
+            <i class="fa-solid fa-pen-to-square me-2"></i> Edit Details
+        </button>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="detail-card mb-4">
+                <h5 class="section-title"><i class="fa-solid fa-circle-info me-2"></i> Basic Operations</h5>
+
+                <div class="info-group">
+                    <div class="info-label"><i class="fa-solid fa-car-side"></i> Vehicle Type</div>
+                    <div class="info-value">
+                        @if (Model.type == "Both")
+                        {
+                            <span class="badge bg-primary px-3">Bike & Car</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-info px-3">@Model.type Only</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label"><i class="fa-solid fa-warehouse"></i> Total Capacity</div>
+                    <div class="info-value">
+                        @if (Model.type == "Bike")
+                        {
+                            <span>@Model.bikespace Slots</span>
+                        }
+                        else if (Model.type == "Car")
+                        {
+
+                            <span>@Model.carspace Slots</span>
+                        }
+                        else
+                        {
+                            <span class="me-3"><i class="fa-solid fa-motorcycle opacity-50"></i> @Model.bikespace</span>
+                            <span><i class="fa-solid fa-car opacity-50"></i> @Model.carspace</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label"><i class="fa-solid fa-clock"></i> Operating Hours</div>
+                    <div class="info-value fw-bold text-primary">@Model.operatinghours</div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label"><i class="fa-solid fa-indian-rupee-sign"></i> Hourly Rate</div>
+                    <div class="info-value">
+                        <span class="rate-badge">₹ @Model.hourrate / hr</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-card mt-4">
+                <h5 class="section-title"><i class="fa-solid fa-location-dot me-2"></i> Location Details</h5>
+                <div class="info-group">
+                    <div class="info-label">Full Address</div>
+                    <div class="info-value text-muted small">@Model.address</div>
+                </div>
+
+                <div class="row mt-3 g-3">
+                    <div class="col-6 col-sm-6">
+                        <div class="p-3 bg-light rounded-3 text-center text-sm-start">
+                            <label class="small text-uppercase fw-bold text-muted d-block">City</label>
+                            <span class="fw-semibold">@Model.city</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6">
+                        <div class="p-3 bg-light rounded-3 text-center text-sm-start">
+                            <label class="small text-uppercase fw-bold text-muted d-block">State</label>
+                            <span class="fw-semibold">@Model.state</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a href="@Model.map" target="_blank" class="btn btn-outline-secondary btn-sm w-100 py-2">
+                        <i class="fa-solid fa-map-location-dot me-2"></i> View on Google Maps
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="park-img-wrapper mb-4">
+                <img src="~/Parkings/@Model.photo" class="img-fluid w-100" style="object-fit: cover; height: 300px; border-radius: 16px;" alt="Parking View" />
+            </div>
+
+            <div class="alert alert-info border-0 shadow-sm rounded-4 p-4">
+                <h6 class="fw-bold"><i class="fa-solid fa-lightbulb me-2"></i> Quick Tip</h6>
+                <p class="small m-0">Keep your hourly rates competitive for your area to increase daily occupancy. Updates to capacity reflect instantly in the user app.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="EditModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold">Edit Parking Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label>Parking Name</label>
+                            <input type="text" class="form-control" value="@Model.parkingname" />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Owner Name</label>
+                            <input type="text" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Email</label>
+                            <input type="email" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Mobile</label>
+                            <input type="number" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Hourly Rate (₹)</label>
+                            <input type="text" class="form-control" value="@Model.hourrate" />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Operating Hours</label>
+                            <input type="text" class="form-control" value="@Model.operatinghours" />
+                        </div>
+                        <div class="col-12">
+                            <label>Google Map URL</label>
+                            <input type="text" class="form-control" />
+                        </div>
+                        <div class="col-12">
+                            <label>New Address</label>
+                            <textarea class="form-control" rows="2"></textarea>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <div class="d-flex gap-4 flex-wrap">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="covered">
+                                    <label class="form-check-label mt-0" for="covered">Covered Parking</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="ev">
+                                    <label class="form-check-label mt-0" for="ev">EV Charging</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary px-4">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>

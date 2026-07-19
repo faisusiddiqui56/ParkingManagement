@@ -1,0 +1,258 @@
+﻿@model IEnumerable<ParkingManagement.Models.Feedback>
+@{
+    ViewBag.Title = "Super Admin Dashboard";
+    Layout = "_SuperAdminLayout";
+}
+
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link href="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.css" rel="stylesheet">
+
+<style>
+    :root {
+        --skote-sidebar-bg: #2a3042;
+        --skote-primary: #556ee6;
+        --skote-success: #34c38f;
+        --skote-warning: #f1b44c;
+        --skote-light-gray: #f8f8fb;
+    }
+
+    /* body {
+        background-color: var(--skote-light-gray);
+        font-family: 'Inter', sans-serif;
+    } */
+
+    /* --- Enhanced Card Design --- */
+    .card {
+        border: none;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+    /* User Avatar Initial circle */
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        background: var(--accent-purple);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin: 0 auto 5px;
+    }
+
+    .welcome-card {
+        background: linear-gradient(135deg, #556ee6 0%, #3452e1 100%) !important;
+        overflow: hidden;
+        position: relative;
+    }
+
+        /* Small decorative circle for the welcome card */
+        .welcome-card::after {
+            content: "";
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            top: -50px;
+            right: -50px;
+        }
+
+    .mini-stat-icon {
+        width: 48px;
+        height: 48px;
+        line-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        border-radius: 12px;
+        background: rgba(85, 110, 230, 0.1);
+        color: var(--skote-primary);
+    }
+
+    /* --- Activity/Timeline --- */
+    .activity-list {
+        padding-left: 1rem;
+        border-left: 2px dashed #e9ecef;
+        margin-left: 10px;
+    }
+
+    .activity-item {
+        position: relative;
+        padding-bottom: 1.5rem;
+        padding-left: 20px;
+    }
+
+        .activity-item::before {
+            content: "";
+            position: absolute;
+            left: -23px;
+            top: 3px;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border: 2px solid var(--skote-primary);
+            border-radius: 50%;
+        }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="row mb-3">
+        <div class="col-12">
+            <h4 class="fw-bold text-uppercase tracking-wide" style="font-size: 1.1rem; color: #495057;">Overview Dashboard</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="card welcome-card text-white border-0">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-12">
+                            <h5 class="fw-bold">Welcome Back, @ViewBag.Name</h5>
+                            <p class="text-white-50 small mb-4">AuraPark Central Management</p>
+                            <div class="d-flex justify-content-center">
+                                <div class="user-avatar shadow-sm bg-warning">
+                                    @ViewBag.Name.Substring(0, 1).ToUpper()
+                                </div>
+                                
+                                <div class="w-75">
+                                    <h6 class="mb-0 fw-bold">Super Admin</h6>
+                                    <span class="badge bg-success small">Verified Account</span>
+                                </div>
+                            </div>
+                        </div>
+                   
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mb-4">Recent Feedback</h5>
+                    <div class="activity-list">
+                        @foreach(var row in Model)
+                        {
+                            <div class="activity-item">
+                                <span class="text-muted small d-block">@row.date</span>
+                                <p class="mb-0"><strong>@row.name:</strong> @row.message.</p>
+                            </div>
+                        }
+            
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-8">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <p class="text-muted small fw-bold text-uppercase mb-1">Total Spots</p>
+                                    <h3 class="fw-bold mb-0">@ViewBag.Spots</h3>
+                                </div>
+                                <div class="mini-stat-icon">
+                                    <i class='bx bxs-car-garage'></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <p class="text-muted small fw-bold text-uppercase mb-1">Pending Requests</p>
+                                    <h3 class="fw-bold mb-0 text-warning">@ViewBag.Requested</h3>
+                                </div>
+                                <div class="mini-stat-icon" style="background: rgba(241, 180, 76, 0.1); color: var(--skote-warning);">
+                                    <i class='bx bx-time-five'></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <p class="text-muted small fw-bold text-uppercase mb-1">User Queries</p>
+                                    <h3 class="fw-bold mb-0 text-success">@ViewBag.Contact</h3>
+                                </div>
+                                <div class="mini-stat-icon" style="background: rgba(52, 195, 143, 0.1); color: var(--skote-success);">
+                                    <i class='bx bx-help-circle'></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">Parking Analytics</h5>
+                    <div class="btn-group btn-group-sm shadow-sm">
+                        <button class="btn btn-outline-secondary">Month</button>
+                        <button class="btn btn-primary">Year</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="analytics-chart" style="min-height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var options = {
+            series: [
+                { name: "Occupancy Rate", data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43, 60] },
+                { name: "Net Revenue", data: [50, 23, 20, 8, 13, 27, 33, 12, 11, 20, 15, 25] }
+            ],
+            chart: {
+                height: 350,
+                type: 'area',
+                toolbar: { show: false },
+                fontFamily: 'Inter, sans-serif'
+            },
+            colors: ['#556ee6', '#34c38f'],
+            stroke: { curve: 'smooth', width: 3 },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.4,
+                    opacityTo: 0.1,
+                }
+            },
+            dataLabels: { enabled: false },
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                axisBorder: { show: false },
+            },
+            grid: { borderColor: '#f1f1f1' }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#analytics-chart"), options);
+        chart.render();
+    });
+</script>

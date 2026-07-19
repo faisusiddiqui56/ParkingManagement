@@ -1,0 +1,631 @@
+﻿
+@{
+    ViewBag.Title = "Home - AuraPark";
+    Layout = "_WebsiteLayout";
+}
+
+<style>
+    /* Custom Orange Color from image */
+    .text-orange {
+        color: #d97706;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    /* Card Styling */
+    .testimonial-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        height: 100%;
+        transition: transform 0.2s ease;
+    }
+
+        .testimonial-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #4b5563;
+        }
+
+    .date-text {
+        font-size: 0.8rem;
+        color: #9ca3af;
+    }
+
+    /* Positioning the Carousel Controls like the image */
+    .carousel-control-prev, .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        background-color: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 1;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+
+    .carousel-control-prev {
+        left: -10px;
+    }
+
+    .carousel-control-next {
+        right: -10px;
+    }
+
+    .im {
+        height: 50px ;
+        width: 50px;
+        object-fit: cover;
+    }
+    /* 1. Smooth Fade Transition for the Slide itself */
+    .carousel-fade .carousel-item {
+        transition-duration: 0.8s; /* Slow down the fade for a premium feel */
+    }
+
+    /* 2. Custom Keyframe for the Card Content */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* 3. Apply animation ONLY when the item is active */
+    .carousel-item.active .testimonial-card {
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    /* Optional: Stagger the second card slightly on desktop */
+    .carousel-item.active .col-md-6:nth-child(2) .testimonial-card {
+        animation-delay: 0.2s;
+    }
+
+    /* 4. Improve the Control Buttons hover effect */
+    .carousel-control-prev:hover, .carousel-control-next:hover {
+        background-color: #AB1111; /* AuraPark Theme Red */
+        border-color: #AB1111;
+    }
+
+        .carousel-control-prev:hover .carousel-control-prev-icon,
+        .carousel-control-next:hover .carousel-control-next-icon {
+            filter: invert(0) brightness(100); /* Make arrows white on hover */
+        }
+    /* Darken the arrow icons */
+    .carousel-control-prev-icon, .carousel-control-next-icon {
+        filter: invert(1) grayscale(100);
+        width: 20px;
+    }
+
+    .hero-left > h1 {
+        font-size: 70px;
+    }
+
+    .hero-left > p {
+        font-size: 20px;
+    }
+
+    .car {
+        height: 70vh;
+        background-color: white;
+    }
+
+    .hero {
+        height: 100vh;
+    }
+
+    .heroimage {
+        animation: change;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        animation-duration: 12s;
+    }
+
+    .location-map {
+        height: 50px;
+        margin-right: 10px;
+    }
+
+    .register-image {
+        height: 55px;
+    }
+    @@keyframes change {
+        0%
+
+    {
+        content: url('/Assets/images/rubicon-image.png');
+        transition: all ease 1s;
+    }
+
+    20% {
+        content: url('/Assets/images/Yamaha.png');
+        transition: all ease 1s;
+    }
+
+    40% {
+        content: url('/Assets/Images/Honda-car-image.png');
+        transition: all ease 1s;
+    }
+
+    60% {
+        content: url('/Assets/Images/honda-shine.png');
+        transition: all ease 1s;
+    }
+
+    80% {
+        content: url('/Assets/Images/hf-delux.png');
+        transition: all ease 1s;
+    }
+
+    100% {
+        content: url('/Assets/Images/rubicon-image.png');
+        transition: all ease 1s;
+    }
+
+    }
+
+    .goto-btn:hover {
+        transform: scale(1.05);
+        transition: all ease 0.2s;
+    }
+    /* service */
+    .service-img > div {
+        position: absolute;
+        top: -16px;
+        left: -24px;
+        background-color: gainsboro;
+        padding: 0px 25px;
+        font-size: 50px;
+        font-weight: 900;
+        color: blue;
+    }
+
+    .service-heading {
+        font-size: 50px;
+        color: #AB1111;
+    }
+
+    .service-card {
+        position: relative;
+        cursor: pointer;
+    }
+
+        .service-card .service-img,
+        .service-card .service-body {
+            z-index: 5;
+        }
+
+        .service-card::after {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            content: " ";
+            display: flex;
+            height: 0%;
+            width: 0%;
+            background-color: rgb(236, 148, 236);
+            z-index: -1;
+            border-bottom-right-radius: 100%;
+            transition: all 0.4s ease;
+        }
+
+        .service-card:hover {
+            box-shadow: 5px 7px 3px rgb(45, 43, 43);
+            transition: all 0.1s ease;
+            transform: translateY(-5px);
+            /* background-color: rgb(236, 148, 236); */
+        }
+
+            .service-card:hover.service-card::after {
+                height: 100%;
+                width: 100%;
+                border-bottom-right-radius: 0px;
+            }
+
+            .service-card:hover .service-img > div {
+                background-color: rgb(249, 195, 249);
+                color: purple;
+                transition: all 0.1s ease;
+            }
+
+    .next {
+        height: 100px;
+        transform: rotateZ(-90deg);
+        margin-bottom: 50px;
+    }
+    /* services */
+    #header {
+        transition: all 0.2s ease;
+    }
+
+    .accordion-item {
+        outline: none;
+        
+    }
+    .accordion-item:focus {
+        outline:none;
+        
+    }
+
+    @@media (max-width:426px) {
+    
+
+    .hero-left > h1 {
+        font-size: 50px;
+    }
+
+    .hero {
+        height: 130vh;
+    }
+
+    .hero-left > p {
+        font-size: 18px;
+    }
+
+    .car {
+        height: 40vh;
+    }
+
+    .next {
+        height: 100px;
+        transform: rotateZ(360deg);
+        margin-bottom: 50px;
+    }
+
+    .service-img > div {
+        top: -8.5px;
+        left: -9px;
+    }
+
+    .phone {
+        text-align: center;
+    }
+
+
+    }
+    @@media (max-width: 767px) {
+        .carousel-control-prev {
+            left: 5px;
+        }
+
+        .carousel-control-next {
+            right: 5px;
+        }
+        /* Ensure the card takes full width on mobile */
+        .testimonial-card {
+            margin: 0 10px;
+        }
+    }
+
+    /* Decorative line next to heading */
+    .testimonial-line {
+        height: 1px;
+        /* This color matches the light blue/purple line in your image */
+        background: linear-gradient(90deg, #6366f1 0%, rgba(99, 102, 241, 0) 100%);
+        opacity: 0.3;
+    }
+
+    /* Optional: Mobile adjustment for the heading */
+    @@media (max-width: 426px) {
+        .testimonial-line {
+            /* Makes the line shorter or hidden on very small screens if needed */
+            display: block;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<!-- hero section start -->
+<div class="row hero" style=" padding-top:105px; background: url(./Assets/Images/banner-bg.png); background-size: 100% 100%;">
+    <div class="col-sm-6 hero-left text-light d-flex flex-column justify-content-center ">
+        <h1 class="px-sm-5 px-3 fw-bold text-start">
+            <b class="text-danger">Looking</b> to <br> Park Your Vehicle
+        </h1>
+        <p class="my-3 ps-sm-5 mb-sm-5 px-3 text-start">
+            Find the exact parking spot you need, filtered by your comfort and budget.
+        </p>
+        <div class="d-flex flex-wrap gap-3 p-3 align-items-center justify-content-center">
+            <div class="">
+                <a asp-action="FindParking" class="btn goto-btn px-4 bg-white d-flex justify-content-center align-items-center ms-sm-5 fw-bold">
+                    <img class="location-map" src="~/Assets/images/wired-lineal-52-location-pin-on-square-map.gif" alt="">
+                    <div class="m-0 p-0 text-black d-flex gap-0 flex-column">
+                        <span class="fs-5  my-0 py-0">PARKING</span>
+                        <span class="text-start fw-normal my-0 py-0">Near Me</span>
+                    </div>
+                </a>
+            </div>
+            <div class="">
+                <a asp-action="AddParking" class="btn goto-btn px-4 bg-white d-flex justify-content-center align-items-center ms-sm-5 fw-bold">
+                    <img class="register-image" src="./Assets/Images/register-image-removebg-preview.png" alt="">
+                    <div class="m-0 p-0 text-black d-flex gap-0 flex-column">
+                        <span class="fs-5 my-0 py-0">REGISTER</span>
+                        <span class="text-start fw-normal my-0 py-0">New Parking</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 d-flex justify-content-center align-items-end">
+        <div class=" rounded-top-5 car d-flex justify-content-center mt-auto" style="width: 60%; position: relative;">
+            <img class="mt-5 heroimage" id="heroImage" style="width: 90vmin; position: absolute;" alt="">
+        </div>
+    </div>
+</div>
+
+<!-- hero section end -->
+<!--  -->
+<div class="row p-sm-4 py-4 px-2 bg-white">
+    <div class="col-sm-12 text-black p-sm-5 my-2">
+        <h1 class="service-heading fw-bold text-center">Services</h1>
+        <p class="mx-auto px-sm-5 w-75 text-center">
+            At <b>AuraPark,</b> we turn the frustrating hunt for parking into a simple, three-tap process. We don't just show you nearby garages; we connect you to the exact spot that fits your needs, budget, and schedule.
+        </p>
+    </div>
+    <div class="col-sm-3 service-card px-sm-4 py-sm-3 p-2 mb-5 text-center border border-1 border-secondary-subtle  mx-auto">
+        <div class="service-img w-100" style="position: relative;">
+            <div>
+                1
+            </div>
+            <img class="" style="height: 150px;" src="~/Assets/images/search-icon-png-9987.png" alt="">
+        </div>
+        <div class="service-body">
+            <h5 class="my-2 text-primary fw-bold">Precision Search & Filtering</h5>
+            <p style="text-align: justify;">
+                Stop wasting time circling the block. Our powerful search engine filters real-time parking availability by the criteria that matter most to you, instantly.
+            </p>
+        </div>
+    </div>
+    <div class="col-sm-1 d-flex justify-content-center align-items-center">
+        <img class="next" src="~/Assets/Images/going-next-arrow-gif.webp" alt="">
+    </div>
+    <div class="col-sm-3 service-card px-sm-4 py-sm-3 p-2 mb-5 text-center border border-1 border-secondary-subtle  mx-auto">
+        <div class="service-img w-100" style="position: relative;">
+            <div>
+                2
+            </div>
+            <img class="" style="height: 150px;" src="https://cdn-icons-png.flaticon.com/256/5278/5278681.png" alt="">
+        </div>
+        <div class="service-body">
+            <h5 class="my-2 text-primary fw-bold">Real-Time Availability & Booking</h5>
+            <p style="text-align: justify;">
+                Eliminate uncertainty with guaranteed reservations. See exactly how many spots are open right now and secure your space before you even leave home.
+            </p>
+        </div>
+    </div>
+    <div class="col-sm-1  d-flex justify-content-center align-items-center">
+        <img class="next" src="~/Assets/images/going-next-arrow-gif.webp" alt="">
+    </div>
+    <div class="col-sm-3 service-card px-sm-4 py-sm-3 p-2 mb-5 text-center border border-1 border-secondary-subtle  mx-auto">
+        <div class="service-img w-100" style="position: relative;">
+            <div>
+                3
+            </div>
+            <img class="" style="height: 150px;" src="https://cdn-icons-png.flaticon.com/512/702/702994.png" alt="">
+        </div>
+        <div class="service-body">
+            <h5 class="my-2 text-primary fw-bold">Comprehensive Parking Options</h5>
+            <p style="text-align: justify;">
+                We partner with a wide network of parking providers to ensure you always have a choice, regardless of your vehicle or trip duration.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ -->
+<div class="row gy-5 bg-light p-sm-5  py-3 gy-lg-0">
+    <h1 class="text-center mb-sm-5 fw-bold" style="color: #AB1111; font-family:sans-serif;">FAQ'S</h1>
+    <div class="col-sm-6">
+        <h2 class="h1 mb-3">Unlocking possibilities for your journey. All parking questions answered. </h2>
+        <p class="lead fs-4 text-secondary mb-4">We hope you have found an answer to your question. If you need any help, please contact us via email.</p>
+        <img class="w-100 mx-auto" src="~/Assets/images/faqs.png" />
+    </div>
+    <div class="col-12 col-lg-6">
+        <div class="row justify-content-xl-end">
+            <div class="col-12 col-xl-11">
+                <div class="accordion accordion-flush" id="accordionExample">
+
+                    <div class="accordion-item mb-4 shadow-sm">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button bg-transparent fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Does AuraPark allow me to reserve or book a spot ahead of time?
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <p>
+                                    No. AuraPark is a real-time parking discovery tool, not a booking platform. We specialize in showing you highly filtered, accurate information on available spots, including amenities (like EV charging) and current rates. Once you Locate a spot on the app, you navigate there directly and pay the posted rate at the lot entrance or kiosk.</p>
+                           
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item mb-4 shadow-sm">
+                        <h2 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed bg-transparent fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseTwo">
+                                How accurate is the real-time availability shown on AuraPark?
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+                            <div class="accordion-body">
+                                <p>
+                                    We integrate with a variety of data sources, including smart city feeds and community suggestions, to provide the most current data possible. While we strive for 100% accuracy, parking availability can change quickly. We recommend checking the app just before you depart and using our turn-by-turn navigation for the most reliable results.
+                                </p>
+    
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item mb-4 shadow-sm">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed bg-transparent fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                How can AuraPark help me find special parking features, like EV charging or covered spots?
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+                            <div class="accordion-body">
+                                <p>This is our specialty! AuraPark allows you to Hyper-Filter your search results. You can specifically filter spots that include EV charging stations, accessible parking, height restrictions, and whether the spot is covered or uncovered. This ensures the parking spot meets your vehicle's exact needs.</p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item mb-4 shadow-sm">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed bg-transparent fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
+                                I found a great spot that isn't on the map. How can I suggest it?
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+                            <div class="accordion-body">
+                                <p>We rely on our community! If you find a hidden, local, or newly available spot, please use our "Suggest a Spot" feature. This anonymous contribution helps us grow our database and makes parking easier for everyone in your city. Your suggested spots will be reviewed by our team before being added.</p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item mb-4 shadow-sm">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed bg-transparent fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseTwo">
+                                Is the parking rate shown in the app the exact price I will pay?
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+                            <div class="accordion-body">
+                                <p>
+                                    The hourly rate displayed on AuraPark is the most recently reported or advertised rate provided by the lot operator or our data sources. While these rates are highly accurate, they are estimates and may be subject to change by the parking operator. You will pay the final price directly to the facility upon entry or exit.
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ END -->
+
+<!-- Testimonial start -->
+<div class="d-flex align-items-center mb-4 ms-5 mt-3 mt-sm-5">
+    <h2 class="fw-bold m-0 me-3 mb-1" style="color: #AB1111; font-family:sans-serif;">Testimonials</h2>
+    <div class="testimonial-line flex-grow-1"></div>
+</div>
+<div id="testimonialCarousel" class="carousel mt-sm-5 px-5 carousel-fade slide">
+    <div class="carousel-inner" id="testimonial-container">
+        <div class="carousel-item active">
+            <div class="row">
+               
+               
+            </div>
+        </div>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+                const testimonials = [
+            {
+                name: "Lakshay",
+                status: "Bought car insurance via Park+ • Verified User",
+                text: "Paid online and got my policy in minutes — Park+ truly makes insurance instant and hassle-free",
+                date: "2025-09-14",
+                image: "https://i.pravatar.cc/150?u=lakshay"
+            },
+            {
+                name: "Nidhaan Srivastava",
+                status: "Bought car insurance via Park+ • Verified User",
+                text: "Everything was clear and simple — no jargon, just honest info that made buying insurance stress-free",
+                date: "2025-10-02",
+                image: "https://i.pravatar.cc/150?u=nidhaan"
+            },
+            {
+                name: "Ananya Rao",
+                status: "Bought car insurance via Park+ • Verified User",
+                text: "The renewal process was so smooth. I didn't have to upload many documents at all!",
+                date: "2025-11-15",
+                image: "https://i.pravatar.cc/150?u=ananya"
+            },
+            {
+                name: "Ananya Rao",
+                status: "Bought car insurance via Park+ • Verified User",
+                text: "The renewal process was so smooth. I didn't have to upload many documents at all!",
+                date: "2025-11-15",
+                image: "https://i.pravatar.cc/150?u=ananya"
+            }
+        ];
+
+    function renderTestimonials() {
+        const container = document.getElementById('testimonial-container');
+        let html = '';
+
+        // Check if the screen is mobile (Bootstrap 'md' breakpoint is 768px)
+        const isMobile = window.innerWidth < 768;
+        const itemsPerSlide = isMobile ? 1 : 2;
+
+        for (let i = 0; i < testimonials.length; i += itemsPerSlide) {
+            const isActive = i === 0 ? 'active' : '';
+
+            html += `<div class="carousel-item ${isActive}">
+                        <div class="row">
+                            ${renderCard(testimonials[i])}
+                            ${!isMobile && testimonials[i + 1] ? renderCard(testimonials[i + 1]) : ''}
+                        </div>
+                     </div>`;
+        }
+        container.innerHTML = html;
+    }
+
+    // Re-render when window is resized to switch between 1 and 2 cards
+    window.addEventListener('resize', renderTestimonials);
+
+    // Run on load
+    document.addEventListener('DOMContentLoaded', renderTestimonials);
+
+        function renderCard(data) {
+            return `
+                <div class="col-md-6">
+                    <div class="testimonial-card p-4 h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="${data.image}" class="rounded-circle me-3" width="50" height="50" alt="User">
+                            <div>
+                                <h6 class="mb-0 fw-bold">${data.name}</h6>
+                                <small class="text-orange">${data.status}</small>
+                            </div>
+                        </div>
+                        <p class="text-muted">${data.text}</p>
+                        <span class="date-text d-block mt-auto">${data.date}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Run the function when the page loads
+        document.addEventListener('DOMContentLoaded', renderTestimonials);
+    </script>
+
+
+<script>
+    window.addEventListener('scroll', function() {
+        if (window.scrollY >= 40) {
+           header.style.backgroundColor = "black";
+           
+        }
+        else{
+            header.style.backgroundColor = "transparent";
+        }
+    });
+</script>
+
+
+

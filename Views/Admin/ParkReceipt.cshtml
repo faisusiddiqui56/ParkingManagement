@@ -1,0 +1,300 @@
+﻿@model ParkingManagement.Models.dailyParking
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = "Parking Voucher - Admin";
+    Layout = "_AdminLayout";
+}
+
+    <style>
+        /* Updated CSS for Professional Parking Voucher */
+      
+
+        .slip-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #cceeff;
+            border-radius: 6px;
+            box-shadow: 0 8px 20px rgba(0, 50, 100, 0.1);
+            padding: 30px;
+        }
+
+        /* Header Styling */
+        .header {
+            text-align: center;
+            background-color: #004d99;
+            color: white;
+            padding: 20px 0;
+            margin: -30px -30px 30px -30px;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+        }
+
+            .header h1 {
+                font-size: 26px;
+                margin: 5px 0 0 0;
+                letter-spacing: 0.5px;
+            }
+
+            .header p {
+                margin: 5px 0;
+                font-size: 14px;
+                font-weight: 300;
+            }
+
+        /* Section Title and Details */
+        .section-title {
+            font-size: 18px;
+            color: #004d99;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 15px;
+            border-bottom: 1px dashed #f0f0f0;
+        }
+
+            .detail-row:last-of-type {
+                border-bottom: none;
+            }
+
+            .detail-row span:first-child {
+                font-weight: 500;
+                color: #444;
+            }
+
+            .detail-row span:last-child {
+                font-weight: bold;
+                color: #000;
+            }
+
+        /* Key Operational Data Highlight */
+        .key-data {
+            padding: 15px;
+            margin: 15px 0;
+            background-color: #f2f8ff;
+            border: 1px solid #007bff;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+            .key-data strong {
+                color: #cc0000;
+            }
+
+        /* Access Credential Area Styling */
+        .access-area {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+            .access-area strong {
+                display: block;
+                margin-bottom: 15px;
+                font-size: 18px;
+                color: #004d99;
+            }
+
+        /* Financial Summary */
+        .summary .total {
+            background-color: #e6ffec;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            border: 1px solid #4CAF50;
+        }
+
+        /* Instructional Notes */
+        .instructions {
+            margin-top: 25px;
+            padding: 15px;
+            border-left: 5px solid #ffaa00;
+            background-color: #fff8e0;
+            font-size: 14px;
+            color: #664400;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* --- NEW PRINT OPTION STYLES (VISIBLE ON SCREEN ONLY) --- */
+        .print-area {
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .print-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .print-btn:hover {
+                background-color: #45a049;
+            }
+
+        /* --- PRINT MEDIA QUERY (ENSURES CLEAN PRINT OUTPUT) --- */
+        @@media print {
+            body
+
+        {
+            background-color: white !important;
+            padding: 0 !important;
+        }
+
+        .slip-container {
+            box-shadow: none !important;
+            border: 1px solid #000 !important;
+            padding: 15px !important;
+        }
+
+        .header, .key-data, .summary .total, .instructions {
+            background-color: white !important; /* Remove colored backgrounds */
+            color: #000 !important;
+            border-color: #000 !important;
+        }
+
+        .header {
+            border-bottom: 2px solid #000 !important;
+        }
+
+        .print-area {
+            display: none; /* HIDE THE BUTTON WHEN PRINTING */
+        }
+
+        }
+    </style>
+
+
+<div class="slip-container" id="content">
+
+        <div class="header">
+            <h1>AuraPark</h1>
+            <p>Parking Reservation Voucher</p>
+            <!-- <p>Confirmation Reference: *PRK-90012345*</p> -->
+        </div>
+
+        <div class="section-title">🚗 Vehicle Identification</div>
+        <div class="key-data">
+            LICENSE PLATE: <strong style="font-size: 1.4em;">
+                @Model.vehiclenumber
+
+            </strong>
+        </div>
+        <!-- <div class="detail-row">
+            <span>Vehicle Model:</span>
+            <span>Standard Sedan (Honda Civic)</span>
+        </div> -->
+
+        <hr style="border-top: 1px solid #eee; margin: 15px 0;">
+
+        <div class="section-title">🕒 Other Details</div>
+
+        <div class="detail-row">
+            <span>Customer Name:</span>
+            <span>@Model.ownername</span>
+        </div>
+        <div class="detail-row">
+            <span> Entry Time:</span>
+            <span>@Model.date (@Model.intime)</span>
+        </div>
+        <div class="detail-row">
+            <span>Hourly Rate:</span>
+        <span>₹ @ViewBag.Hour</span>
+        </div>
+        <hr style="border-top: 1px solid #eee; margin: 15px 0;">
+
+
+
+        <div class="instructions">
+            Operational Directive: This reservation is strictly tied to the license @Model.vehiclenumber and may be rejected if a different vehicle is presented.
+        </div>
+
+        <div class="footer">
+            <p>This document serves as your official proof of reservation.</p>
+            <p>24/7 Support Line: 7817095043 |  Email: support@auraparksolutions.com</p>
+        </div>
+
+    </div>
+
+    <div class="print-area">
+        <button class="print-btn" id="cmd">
+            🖨 *Print This Voucher*
+        </button>
+        <p style="margin-top: 10px; font-size: 13px; color: #666;">
+            We recommend printing a physical copy or saving this page as a PDF for reliable access.
+        </p>
+    </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+    document.getElementById("cmd").addEventListener("click", function () {
+        const { jsPDF } = window.jspdf;
+
+        let content = document.getElementById("content");
+
+        // 1. Temporarily hide the print area before capturing the content
+        let printArea = document.querySelector(".print-area");
+        if (printArea) {
+            printArea.style.display = 'none';
+        }
+
+        html2canvas(content, { scale: 2 }).then(canvas => {
+            let imgData = canvas.toDataURL("image/png");
+
+            // PDF setup: 'p' (portrait), 'mm' (unit), 'a4' (size)
+            let pdf = new jsPDF("p", "mm", "a4");
+
+            // A4 dimensions in mm (Portrait)
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+
+            // Calculate image height proportionally
+            let imgHeight = (canvas.height * pdfWidth) / canvas.width;
+            let imgWidth = pdfWidth;
+
+            // Adjustments to fit nicely on the A4 page with margins
+            const margin = 10; // 10mm margin on all sides
+            imgWidth = pdfWidth - (2 * margin);
+            imgHeight = canvas.height * imgWidth / canvas.width;
+
+            // Add the image to the PDF with a margin offset (10, 10)
+            pdf.addImage(imgData, "PNG", margin, margin, imgWidth, imgHeight);
+
+            pdf.save("parking-receipt.pdf");
+
+            // 2. Restore the print area visibility after the PDF is saved
+            if (printArea) {
+                printArea.style.display = 'block';
+            }
+        });
+    });
+</script>
+
+

@@ -1,0 +1,463 @@
+﻿@model ParkingManagement.Models.HiddenSpot;
+@{
+    ViewBag.Title = "Add Parking - Website";
+    Layout = "_WebsiteLayout";
+}
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.23.3/dist/js/uikit.min.js"></script>
+
+<style>
+    :root {
+        --primary-red: #AB1111;
+        --accent-gold: #faca82;
+        --soft-bg: #f8f9fa;
+        --text-dark: #333;
+    }
+
+    body {
+        background-color: var(--soft-bg);
+        overflow-x: hidden;
+    }
+
+    /* Form Styling */
+    .form-container {
+        background: white;
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+    }
+
+    input, select {
+        width: 100%;
+        border: 1px solid #dee2e6 !important;
+        border-radius: 8px !important;
+        padding: 12px !important;
+        transition: all 0.3s;
+        color: var(--text-dark) !important;
+    }
+
+        input:focus, select:focus {
+            border-color: var(--primary-red) !important;
+            box-shadow: 0 0 0 0.2rem rgba(171, 17, 17, 0.1) !important;
+            outline: none;
+        }
+
+    /* Feature Items Responsive */
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 10px;
+        background: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .icon-circle {
+        height: 45px;
+        width: 45px;
+        min-width: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--primary-red);
+        color: white !important;
+        border-radius: 50%;
+    }
+
+    /* Upload Area */
+    #uploadarea {
+        width: 100px;
+        height: 100px;
+        border: 2px dashed #ccc;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        background: #fafafa;
+    }
+
+    /* Timeline Section Responsive */
+    .step-card {
+        padding: 20px;
+        text-align: center;
+        border-radius: 15px;
+        background: white;
+        height: 100%;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border: 2px solid transparent;
+        transition: 0.3s;
+    }
+
+    .req {
+        color: red;
+    }
+    #header {
+        background-color:black;
+    }
+    @@keyframes highlightCycle {
+        0%, 20% {
+            border-color: var(--primary-red);
+            transform: translateY(-5px);
+        }
+
+        25%, 100% {
+            border-color: transparent;
+            transform: translateY(0);
+        }
+    }
+
+    .step-1 {
+        animation: highlightCycle 4s infinite;
+    }
+
+    .step-2 {
+        animation: highlightCycle 4s infinite 1s;
+    }
+
+    .step-3 {
+        animation: highlightCycle 4s infinite 2s;
+    }
+
+    .step-4 {
+        animation: highlightCycle 4s infinite 3s;
+    }
+
+    .arrow-icon {
+        font-size: 30px;
+        color: #ccc;
+    }
+
+    .char {
+        width: 22px !important;
+        height: 22px !important;
+        accent-color: var(--primary-red);
+    }
+
+    /* Responsive Adjustments */
+    @@media (max-width: 991px) {
+        .arrow-icon {
+            transform: rotate(90deg);
+            margin: 10px 0;
+        }
+
+        .display-4 {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+
+<div class="container py-5  mt-5">
+    <div class="row mb-5 mt-sm-5 text-center">
+        <div class="col-12">
+            <h1 class="display-4 fw-bold" style="color: var(--primary-red);">Suggest a Hidden Spot</h1>
+            <p class="lead text-muted">Help fellow drivers by sharing public parking spots not yet on AuraPark.</p>
+        </div>
+    </div>
+
+    <div class="row g-5">
+        <div class="col-lg-5">
+            <h2 class="mb-4 fw-bold text-center text-lg-start">Why choose <span style="color:var(--primary-red)">AuraPark?</span></h2>
+
+            @{
+                var features = new[] {
+                        (Icon: "fa-person", Title: "Trusted Community", Desc: "Trusted by 1000+ Happy Owners."),
+                        (Icon: "fa-user-shield", Title: "Verified Users Only", Desc: "Identity-verified for your peace of mind."),
+                        (Icon: "fa-calendar-check", Title: "Flexible Scheduling", Desc: "List hourly, daily, or monthly."),
+                        (Icon: "fa-chart-line", Title: "Smart Pricing Engine", Desc: "AI suggests the best rates for you."),
+                        (Icon: "fa-file-invoice-dollar", Title: "Transparent Payouts", Desc: "Track every penny in real-time."),
+                        (Icon: "fa-earth-americas", Title: "Eco-Friendly Impact", Desc: "Reduce city traffic and CO2."),
+                        (Icon: "fa-bolt", Title: "Instant Setup", Desc: "Go live in under 5 minutes.")
+                        };
+            }
+
+            @foreach (var feature in features)
+            {
+                <div class="feature-item">
+                    <div class="icon-circle"><i class="fa-solid @feature.Icon"></i></div>
+                    <div>
+                        <span class="fw-bold d-block">@feature.Title</span>
+                        <small class="text-muted">@feature.Desc</small>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-lg-7">
+            <div class="form-container shadow-lg p-3 p-md-5">
+                <form method="post" enctype="multipart/form-data" asp-action="AddParking">
+                    <div class="text-center mb-4">
+                        <p class="mb-2">Direct help via</p>
+                        <a href="https://wa.me/7817095043" class="btn btn-outline-success rounded-pill px-4">
+                            <i class="fa-brands fa-whatsapp me-2"></i> WhatsApp Support
+                        </a>
+                    </div>
+
+                    <div class="position-relative my-4">
+                        <hr>
+                        <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 fw-bold text-muted">OR</span>
+                    </div>
+
+                    <h4 class="text-center mb-4 fw-bold">Registration Form</h4>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1">Full Name <span class="req">*</span></label>
+                            <input type="text" asp-for="ownername" placeholder="John Doe" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1">Email <span class="req">*</span></label>
+                            <input type="email" asp-for="email" placeholder="john@example.com" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1">Mobile <span class="req">*</span></label>
+                            <input type="number" asp-for="mobile" placeholder="9876543210" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1">Parking Name</label>
+                            <input type="text" asp-for="parkingname" placeholder="City Central Parking">
+                        </div>
+
+                        <div class="col-12">
+                            <label class="fw-bold mb-1">Full Address <span class="req">*</span></label>
+                            <input type="text" asp-for="address" placeholder="House/Flat No., Building Name, Street" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1">City <span class="req">*</span></label>
+                            <input type="text" asp-for="city" placeholder="e.g. Mumbai" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1">State <span class="req">*</span></label>
+                            <select asp-for="state" required>
+                                <option value="">Select State</option>
+                                <option>Andhra Pradesh</option>
+                                <option>Arunachal Pradesh</option>
+                                <option>Assam</option>
+                                <option>Bihar</option>
+                                <option>Chhattisgarh</option>
+                                <option>Goa</option>
+                                <option>Gujarat</option>
+                                <option>Haryana</option>
+                                <option>Himachal Pradesh</option>
+                                <option>Jharkhand</option>
+                                <option>Karnataka</option>
+                                <option>Kerala</option>
+                                <option>Madhya Pradesh</option>
+                                <option>Maharashtra</option>
+                                <option>Manipur</option>
+                                <option>Meghalaya</option>
+                                <option>Mizoram</option>
+                                <option>Nagaland</option>
+                                <option>Odisha</option>
+                                <option>Punjab</option>
+                                <option>Rajasthan</option>
+                                <option>Sikkim</option>
+                                <option>Tamil Nadu</option>
+                                <option>Telangana</option>
+                                <option>Tripura</option>
+                                <option>Uttar Pradesh</option>
+                                <option>Uttarakhand</option>
+                                <option>West Bengal</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="fw-bold mb-1">Google Map Link <span class="req">*</span></label>
+                            <input type="url" asp-for="map" placeholder="Paste Google Maps URL here" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1">Type</label>
+                            <select id="vehicle" onchange="Vehicletype()" asp-for="type">
+                                <option value="Both">Both</option>
+                                <option value="Bike">Bike</option>
+                                <option value="Car">Car</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1">Capacity</label>
+                            <div class="d-flex gap-1">
+                                <input type="text" asp-for="carspace" id="carspace" placeholder="Car">
+                                <input type="text" asp-for="bikespace" id="bikespace" placeholder="Bike">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1">Hourly Rate <span class="req">*</span></label>
+                            <input type="text" asp-for="hourrate" placeholder="e.g. 20" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1">Operating Hours <span class="req">*</span></label>
+                            <input type="text" asp-for="operatinghours" placeholder="e.g. 24/7 OR '8AM - 10PM'" required>
+                        </div>
+
+                        
+
+                        <div class="col-12">
+                            <p class="fw-bold mb-2 border-bottom">Amenities</p>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>Covered Parking <br><small class="text-muted">Protection from sun/rain</small></span>
+                                <input type="checkbox" asp-for="covered" class="char">
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span>EV Charging <br><small class="text-muted">Electric vehicle ports</small></span>
+                                <input type="checkbox" asp-for="evcharging" class="char">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="fw-bold mb-2">Upload Spot Photo</label>
+                            <div class="d-flex flex-wrap gap-3 align-items-center">
+                                <input type="file" asp-for="photo" id="photo" hidden accept="image/*">
+                                <div id="uploadarea">
+                                    <span class="material-icons" style="font-size: 40px; color: #aaa;">add_a_photo</span>
+                                </div>
+                                <div id="previewtext" style="display:none; position:relative;">
+                                    <img src="" id="preview" style="height: 100px; border-radius: 10px; border: 1px solid #ddd;">
+                                    <button type="button" id="removepreview" class="btn btn-danger btn-sm position-absolute top-0 end-0" style="border-radius: 50%; transform: translate(50%, -50%);">&times;</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-4">
+                            <div class="form-check">
+                                <input class="form-check-input char" type="checkbox" required id="terms">
+                                <label class="form-check-label ms-2" for="terms">Agree to <a href="#">Terms & Conditions</a></label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 text-center mt-4">
+                            <button type="submit" class="btn btn-lg w-100 fw-bold py-3" style="background: var(--accent-gold); border-radius: 10px;">
+                                SUBMIT SPOT <i class="fa-solid fa-paper-plane ms-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5 pt-5 text-center g-4">
+        <div class="col-12 mb-3">
+            <h2 class="display-6 fw-bold">What's Next?</h2>
+        </div>
+
+        <div class="col-lg-2 col-md-5 mx-auto">
+            <div class="step-card step-1">
+                <span class="material-icons" style="font-size: 48px; color: var(--primary-red);">add_location</span>
+                <p class="fw-bold mt-2">List your spot</p>
+            </div>
+        </div>
+
+        <div class="col-lg-1 col-md-2 d-flex align-items-center justify-content-center">
+            <span class="material-icons arrow-icon">double_arrow</span>
+        </div>
+
+        <div class="col-lg-2 col-md-5 mx-auto">
+            <div class="step-card step-2">
+                <span class="material-icons" style="font-size: 48px; color: var(--primary-red);">travel_explore</span>
+                <p class="fw-bold mt-2">Get discovered</p>
+            </div>
+        </div>
+
+        <div class="col-lg-1 d-none d-lg-flex align-items-center justify-content-center">
+            <span class="material-icons arrow-icon">double_arrow</span>
+        </div>
+
+        <div class="col-lg-2 col-md-5 mx-auto">
+            <div class="step-card step-3">
+                <span class="material-icons" style="font-size: 48px; color: var(--primary-red);">attach_money</span>
+                <p class="fw-bold mt-2">Earn securely</p>
+            </div>
+        </div>
+
+        <div class="col-lg-1 col-md-2 d-flex align-items-center justify-content-center">
+            <span class="material-icons arrow-icon">double_arrow</span>
+        </div>
+
+        <div class="col-lg-2 col-md-5 mx-auto">
+            <div class="step-card step-4">
+                <span class="material-icons" style="font-size: 48px; color: var(--primary-red);">spa</span>
+                <p class="fw-bold mt-2">Relax with AuraPark!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Logic for File Upload
+    const photoInput = document.getElementById("photo");
+    const uploadArea = document.getElementById("uploadarea");
+    const previewContainer = document.getElementById("previewtext");
+    const previewImg = document.getElementById("preview");
+    const removeBtn = document.getElementById("removepreview");
+
+    uploadArea.addEventListener("click", () => photoInput.click());
+
+    photoInput.addEventListener("change", function() {
+        if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+                previewContainer.style.display = "block";
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+
+    removeBtn.addEventListener("click", () => {
+        photoInput.value = "";
+        previewContainer.style.display = "none";
+    });
+
+    function Vehicletype() {
+        const val = document.getElementById("vehicle").value;
+        const car = document.getElementById("carspace");
+        const bike = document.getElementById("bikespace");
+
+        [car, bike].forEach(el => {
+            el.disabled = false;
+            el.style.backgroundColor = "white";
+            if(el.value === "N/A") el.value = "";
+        });
+
+        if (val === "Bike") {
+            car.disabled = true;
+            car.style.backgroundColor = "#eee";
+            car.value = "N/A";
+        } else if (val === "Car") {
+            bike.disabled = true;
+            bike.style.backgroundColor = "#eee";
+            bike.value = "N/A";
+        }
+    }
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            var retmsg = '@TempData["ParkEmailExist"]';
+            if(retmsg.length > 0 && retmsg != null){
+                    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "@TempData["ParkingEmailExist"]!"
+     
+    });
+            }
+
+        var req = '@TempData["ReqSent"]';
+
+    if(req.length > 0 && req != null){
+
+                Swal.fire({
+              title: "@TempData["ReqSent"]",
+              icon: "success",
+              draggable: true
+            });
+    }
+
+        </script>

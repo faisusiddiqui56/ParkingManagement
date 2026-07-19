@@ -1,0 +1,389 @@
+﻿@model ParkingManagement.Models.dailyParking
+@{
+  
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Voucher - @Model.vehiclenumber</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary: black;
+            --dark: #202124;
+            --gray: #5f6368;
+            --bg: #f1f3f4;
+            --success: #1e8e3e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* The Ticket Container */
+        .voucher {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* Top Blue Section */
+        .voucher-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+            .voucher-header i {
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+            }
+
+            .voucher-header h1 {
+                margin: 10px 0 5px;
+                font-size: 1.2rem;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+            }
+
+            .voucher-header p {
+                margin: 0;
+                opacity: 0.9;
+                font-size: 0.85rem;
+            }
+
+        /* The Perforated Divider */
+        .divider {
+            height: 2px;
+            border-top: 2px dashed #e8eaed;
+            margin: 0 20px;
+            position: relative;
+        }
+
+            .divider::before, .divider::after {
+                content: "";
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                background: var(--bg);
+                border-radius: 50%;
+                top: -10px;
+            }
+
+            .divider::before {
+                left: -30px;
+            }
+
+            .divider::after {
+                right: -30px;
+            }
+
+        .voucher-body {
+            padding: 10px 30px 20px 30px;
+        }
+
+        /* License Plate Look */
+        .plate-box {
+            background: #f8f9fa;
+            border: 2px solid var(--dark);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .plate-label {
+            font-size: 0.7rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .plate-number {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--dark);
+            letter-spacing: 2px;
+            display: block;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-bottom: 4px;
+        }
+
+        .info-item span {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        /* QR Code Area */
+        .qr-section {
+            text-align: center;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #e8eaed;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .qr-placeholder {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 10px;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+        }
+
+        /* Total Section */
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+        }
+
+        .total-label {
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .total-amount {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--success);
+        }
+
+        .footer-note {
+            font-size: 0.75rem;
+            color: var(--gray);
+            line-height: 1.5;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        /* Action Buttons */
+        .action-bar {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-print {
+            background: var(--dark);
+            color: white;
+        }
+
+            .btn-print:hover {
+                background: #000;
+            }
+
+        @@media print {
+            .action-bar {
+                display: none;
+            }
+
+            body {
+                padding: 0;
+                background: white;
+            }
+
+            .voucher {
+                box-shadow: none;
+                border: 1px solid #eee;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="voucher" id="content">
+        <div class="voucher-header">
+            <i class="bi bi-p-circle-fill"></i>
+            <h1>@ViewBag.AdminName</h1>
+            <p>Ref: #APS-@ViewBag.AdminId@Model.id.ToString("D6")</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="voucher-body">
+            <div class="plate-box">
+                <span class="plate-label">Vehicle Registration</span>
+                <span class="plate-number">@Model.vehiclenumber.ToUpper()</span>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Customer</label>
+                    <span>@Model.ownername</span>
+                </div>
+                <div class="info-item">
+                    <label>Vehicle Type</label>
+                    <span>@(Model.type == "2W" ? "Two Wheeler" : "Four Wheeler")</span>
+                </div>
+                <div class="info-item">
+                    <label>Entry Time</label>
+                    <span>@Model.intime</span>
+                </div>
+                <div class="info-item">
+                    <label>Date</label>
+                    <span>@Model.date</span>
+                </div>
+                <div class="info-item">
+                    @{
+                        int i = Model.outtime.Length - 1; 
+                    }
+                    <label>Exit Time</label>
+                    <span>@Model.outtime[i - 7]@Model.outtime[i - 6]@Model.outtime[i - 5]@Model.outtime[i - 4]@Model.outtime[i - 3]@Model.outtime[i - 2]@Model.outtime[i - 1]@Model.outtime[i]</span>
+                </div>
+                <div class="info-item">
+                    <label>Date</label>
+                    <span>@Model.outdate</span>
+                </div>
+            </div>
+
+            <div class="qr-section">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Vehicle:@Model.vehiclenumber|Owner:@Model.ownername"
+                     alt="QR Access Code"
+                     width="120"
+                     height="120">
+                
+            </div>
+
+            <div class="total-row">
+                <span class="total-label">Total Amount Paid</span>
+                <span class="total-amount">₨. @(Model.amount ?? "0.00")</span>
+            </div>
+
+            <div class="footer-note">
+                <i class="bi bi-info-circle"></i>
+                Please present this QR code at the scanner during exit. Early/Late stay may result in additional charges.
+            </div>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <button class="btn btn-print" id="cmd">
+            <i class="bi bi-printer"></i> Print Bill
+        </button>
+        <button class="btn" style="background: white; border: 1px solid #ddd;" onclick="window.history.back()">
+            <i class="bi bi-arrow-left"></i> Back
+        </button>
+    </div>
+
+    <p style="margin-top: 20px; font-size: 0.8rem; color: #888;">&copy; 2025 Parking Management Systems</p>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        document.getElementById("cmd").addEventListener("click", function () {
+            const { jsPDF } = window.jspdf;
+            const content = document.getElementById("content");
+            const btn = this;
+
+            // 1. Save original styles & scroll position
+            const originalText = btn.innerHTML;
+            const scrollPos = window.scrollY;
+
+            // 2. Preparation: Scroll to top and show loading state
+            window.scrollTo(0, 0);
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Processing...';
+            btn.disabled = true;
+
+            // 3. Force height and width calculation to ensure nothing is clipped
+            // We use scrollHeight to get the full internal height of the voucher
+            const captureHeight = content.height;
+            const captureWidth = content.scrollWidth;
+
+            html2canvas(content, {
+                scale: 2,           // High resolution
+                useCORS: true,      // Ensures the QR code displays
+                logging: false,
+                height: captureHeight,
+                windowHeight: captureHeight, // Forces the virtual window to match content height
+                y: 0,                        // Start capture at the very top of the element
+                onclone: (clonedDoc) => {
+                    // Ensure the cloned element is visible and not shifted by flexbox
+                    const clonedContent = clonedDoc.getElementById("content");
+                    clonedContent.style.margin = "0";
+                    clonedContent.style.boxShadow = "none";
+                }
+            }).then(canvas => {
+                const imgData = canvas.toDataURL("image/png");
+                const pdf = new jsPDF("p", "mm", "a4");
+
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const margin = 10;
+                const usableWidth = pdfWidth - (margin * 2);
+
+                // Calculate height proportionally
+                const imgHeight = (canvas.height * usableWidth) / canvas.width;
+
+                // Add image to PDF
+                pdf.addImage(imgData, "PNG", margin, margin, usableWidth, imgHeight);
+
+                // Save
+                pdf.save(`Parking_Receipt_${Date.now()}.pdf`);
+
+                // 4. Restore UI
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                window.scrollTo(0, scrollPos); // Put user back where they were
+            }).catch(err => {
+                console.error("PDF Error:", err);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert("Error generating PDF. Check console for details.");
+            });
+        });
+    </script>
+
+
+
+</body>
+</html>
+
+

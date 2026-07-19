@@ -1,0 +1,232 @@
+﻿@model IEnumerable<ParkingManagement.Models.dailyParking>
+@{
+    ViewBag.Title = "Parking History - Admin";
+    Layout = "_AdminLayout";
+}
+
+<style>
+    .history-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+        border: 1px solid #f1f5f9;
+    }
+
+    /* Table Styling */
+    .table-custom {
+        min-width: 800px; /* Prevents column squishing on tablet */
+    }
+
+        .table-custom thead th {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            padding: 16px;
+            border-top: none;
+        }
+
+        .table-custom tbody td {
+            padding: 16px;
+            vertical-align: middle;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .table-custom tbody tr:hover {
+            background-color: #f8fbff;
+        }
+
+    /* Status Badges */
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
+    }
+
+    .status-completed {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-parked {
+        background: #fef9c3;
+        color: #854d0e;
+    }
+
+    .vehicle-no {
+        font-family: 'Monaco', 'Consolas', monospace;
+        font-weight: 700;
+        color: #0f172a;
+        letter-spacing: 0.5px;
+    }
+
+    .amount-text {
+        font-weight: 700;
+        color: #059669;
+        white-space: nowrap;
+    }
+
+    /* Animation for active pulse */
+    @@keyframes pulse-red {
+        0% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.3;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    .animate-pulse {
+        animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        color: #ef4444;
+    }
+
+    /* Mobile Header Adjustments */
+    @@media (max-width: 576px) {
+        .card-header-flex {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 15px;
+        }
+
+        .header-buttons {
+            width: 100%;
+        }
+
+            .header-buttons .btn {
+                flex: 1;
+            }
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="history-card p-0 overflow-hidden">
+                <div class="d-flex justify-content-between align-items-center p-4 card-header-flex">
+                    <div>
+                        <h4 class="fw-bold mb-1">Parking History</h4>
+                        <p class="text-muted small mb-0">Total of <strong>@Model.Count()</strong> records</p>
+                    </div>
+                    <div class="d-flex gap-2 header-buttons">
+                        <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1">
+                            <i class="bi bi-filter"></i> Filter
+                        </button>
+                        <button class="btn btn-primary btn-sm d-flex align-items-center gap-1">
+                            <i class="bi bi-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive px-2">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 50px;">#</th>
+                                <th>Owner & Vehicle</th>
+                                <th>Type</th>
+                                <th>Stay Info</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int sr = 1;
+                            }
+                            @foreach (var row in Model)
+                            {
+                                <tr>
+                                    <td class="text-center text-muted small">@sr</td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="vehicle-no">@row.vehiclenumber.ToUpper()</span>
+                                            <span class="text-muted small">@row.ownername</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (row.type == "2W")
+                                        {
+                                            <span class="text-primary small fw-bold"><i class="fa-solid fa-motorcycle me-1"></i> 2W</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-success small fw-bold"><i class="fa-solid fa-car me-1"></i> 4W</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="small">
+                                            <div class="text-dark fw-semibold">@row.date</div>
+                                            <div class="text-muted">@row.intime — @(row.outtime == "-" ? "Active" : row.outtime)</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (row.outtime == "-")
+                                        {
+                                            <span class="status-badge status-parked">
+                                                <i class="bi bi-record-fill animate-pulse"></i> Parked
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge status-completed">
+                                                <i class="bi bi-check-circle-fill"></i> Completed
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="amount-text">
+                                            @(row.amount != null ? $"₨. {row.amount}" : "₨. 0.00")
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="d-flex justify-content-end gap-1">
+                                            @if (row.outtime != "-")
+                                            {
+                                                <a asp-action="PrintBill" asp-route-id="@row.id" class="btn btn-sm btn-outline-success" title="Bill">
+                                                    <i class="fa-solid fa-money-bill"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="ParkReceipt" asp-route-id="@row.id" class="btn btn-sm btn-outline-primary" title="Receipt">
+                                                    <i class="fa-solid fa-file"></i>
+                                                </a>
+                                                <a asp-action="ExitVehicle" asp-route-id="@row.id" class="btn btn-sm btn-danger" title="Exit">
+                                                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                                </a>
+                                            }
+                                            <a class="btn btn-sm btn-outline-danger" asp-action="deleteparkhistory" asp-route-id="@row.id"
+                                               onclick="return confirm('Delete this record?')" title="Delete">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                sr++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="p-3 bg-light d-md-none text-center">
+                    <small class="text-muted">Swipe left/right to view more table data</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
