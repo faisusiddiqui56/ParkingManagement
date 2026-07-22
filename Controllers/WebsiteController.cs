@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using ParkingManagement.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System;
@@ -99,18 +99,31 @@ namespace ParkingManagement.Controllers
         [HttpPost]
         public IActionResult VerifyAdmin(ParkingOwner data)
         {
-            var olddata = context.ParkingOwner.FirstOrDefault(x => x.email == data.email && x.password == data.password);
+            if (data == null || string.IsNullOrWhiteSpace(data.email) || string.IsNullOrWhiteSpace(data.password))
+            {
+                TempData["LoginError"] = "Please enter both Email and Password";
+                return RedirectToAction("AdminLogin");
+            }
+
+            var inputEmail = data.email.Trim().ToLower();
+            var olddata = context.ParkingOwner.FirstOrDefault(x => x.email != null && x.email.Trim().ToLower() == inputEmail && x.password == data.password);
 
             if (olddata != null) 
             {
-                HttpContext.Session.SetString("Admin", data.email);
+                HttpContext.Session.SetString("Admin", olddata.email);
                 return RedirectToAction("Index", "Admin");
             }
-            else
+
+            // Fallback check if user entered SuperAdmin credentials on AdminLogin page
+            var superAdminData = context.Admin.FirstOrDefault(x => x.email != null && x.email.Trim().ToLower() == inputEmail && x.password == data.password);
+            if (superAdminData != null)
             {
-                TempData["LoginError"] = "Email OR Password is Incorrect";
-                return RedirectToAction("AdminLogin");
+                HttpContext.Session.SetString("SuperAdmin", superAdminData.email);
+                return RedirectToAction("Index", "SuperAdmin");
             }
+
+            TempData["LoginError"] = "Email OR Password is Incorrect";
+            return RedirectToAction("AdminLogin");
         }
         public IActionResult SuperAdminLogin()
         {
@@ -120,12 +133,19 @@ namespace ParkingManagement.Controllers
         [HttpPost]
         public IActionResult VerifySuperAdmin(Admin data)
         {
-            var olddata = context.Admin.FirstOrDefault(x => x.email == data.email && x.password == data.password);
+            if (data == null || string.IsNullOrWhiteSpace(data.email) || string.IsNullOrWhiteSpace(data.password))
+            {
+                TempData["LoginError"] = "Please enter both Email and Password";
+                return RedirectToAction("SuperAdminLogin");
+            }
+
+            var inputEmail = data.email.Trim().ToLower();
+            var olddata = context.Admin.FirstOrDefault(x => x.email != null && x.email.Trim().ToLower() == inputEmail && x.password == data.password);
 
             if (olddata != null) 
             {
-                HttpContext.Session.SetString("SuperAdmin", data.email);
-                return RedirectToAction("index", "SuperAdmin");
+                HttpContext.Session.SetString("SuperAdmin", olddata.email);
+                return RedirectToAction("Index", "SuperAdmin");
             }
             else
             {

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -193,7 +193,7 @@
             <small class="text-uppercase px-4 text-warning fw-bold mt-4 d-block" style="font-size: 0.7rem;">Account</small>
             <ul class="nav flex-column mt-2">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Settings" ? "active" : "")" asp-action="Settings">
                         <i class="fa-solid fa-gear me-2"></i> Settings
                     </a>
                 </li>
@@ -240,7 +240,7 @@
 
             <div class="user-profile d-flex align-items-center">
                 <div class="text-end me-2 d-none d-sm-block">
-                    <p class="m-0 fw-bold small text-dark">Yogesh Pal</p>
+                    <p class="m-0 fw-bold small text-dark">@(ViewBag.Name ?? "Faisal Siddiqui")</p>
                     <p class="m-0 text-muted small" style="font-size: 0.75rem;">Super Admin</p>
                 </div>
                 <img src="https://static.vecteezy.com/system/resources/previews/000/439/863/original/vector-users-icon.jpg" class="rounded-circle" alt="User Avatar">
@@ -257,7 +257,7 @@
             &copy; 2026 <strong>Aura Park</strong>. All Rights Reserved.
         </div>
         <div class="text-muted small">
-            Built with <i class="fa-solid fa-heart text-danger"></i> for Yogesh Pal
+            Built with <i class="fa-solid fa-heart text-danger"></i> for Faisal Siddiqui
         </div>
     </footer>
 
